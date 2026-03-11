@@ -1,2 +1,293 @@
-# CyberFamily
-CyberFamily
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>CyberFamily Architecture Report</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;line-height:1.6}
+#content{max-width:1100px;margin:0 auto;padding:40px 32px}
+
+.cover{background:linear-gradient(135deg,#0f1729 0%,#1a1040 50%,#0f1729 100%);padding:80px 40px;text-align:center;border-radius:20px;margin-bottom:48px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(99,102,241,0.2) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(139,92,246,0.15) 0%,transparent 60%)}
+.cover-badge{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;display:inline-block;position:relative}
+.cover h1{font-size:64px;font-weight:800;background:linear-gradient(135deg,#fff 0%,#a5b4fc 50%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:16px;position:relative}
+.cover-sub{font-size:18px;color:#64748b;margin-bottom:40px;position:relative}
+.cover-meta{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;position:relative}
+.cm{background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-radius:12px;padding:12px 20px;text-align:center}
+.cm .val{font-size:20px;font-weight:700;color:#a5b4fc}
+.cm .lbl{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.section{margin:48px 0}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.sn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.st{font-size:24px;font-weight:700;color:#e2e8f0}
+.div{height:1px;background:linear-gradient(90deg,rgba(99,102,241,0.5),transparent);margin-bottom:24px}
+
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px}
+.stat{background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;text-align:center}
+.sv{font-size:26px;font-weight:800;line-height:1}
+.sl{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:rgba(99,102,241,0.12);color:#a5b4fc;padding:10px 14px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(99,102,241,0.2)}
+td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.04);color:#cbd5e1;vertical-align:top;font-size:12px}
+tr:last-child td{border-bottom:none}
+
+.arch{background:rgba(10,14,26,0.9);border:1px solid rgba(99,102,241,0.15);border-radius:16px;padding:28px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2}
+.ab{display:inline-block;padding:3px 10px;border-radius:7px;font-weight:600;font-size:11px}
+.ab-i{background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)}
+.ab-n{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)}
+.ab-d{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)}
+.ab-p{background:rgba(234,179,8,0.15);color:#fbbf24;border:1px solid rgba(234,179,8,0.3)}
+.ab-g{background:rgba(20,184,166,0.15);color:#2dd4bf;border:1px solid rgba(20,184,166,0.3)}
+.ab-db{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3)}
+.ar{color:#475569;margin:0 4px}
+.arow{margin:3px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ai{margin-left:28px}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:rgba(15,23,42,0.8);border:1px solid rgba(99,102,241,0.1);border-radius:14px;padding:16px;position:relative;overflow:hidden}
+.card-top{height:3px;position:absolute;top:0;left:0;right:0}
+.ci{font-size:22px;margin-bottom:8px}
+.cn{font-size:12px;font-weight:700;color:#e2e8f0;margin-bottom:2px;font-family:'JetBrains Mono',monospace}
+.cp{font-size:10px;color:#475569;font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.cd{font-size:11px;color:#64748b;line-height:1.5}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600;margin-top:6px}
+.bg{background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.bb{background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
+.by{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
+.bp{background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.2)}
+
+.sec-flow{background:rgba(10,14,26,0.8);border:1px solid rgba(99,102,241,0.15);border-radius:16px;padding:24px;margin-bottom:20px}
+.ss{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.ss:last-child{border-bottom:none}
+.si{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sc h4{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:3px}
+.sc p{font-size:11px;color:#64748b}
+code{font-family:'JetBrains Mono',monospace;background:rgba(99,102,241,0.1);padding:1px 5px;border-radius:4px;color:#a5b4fc;font-size:10px}
+
+.enc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ec{border-radius:14px;padding:18px}
+.ey{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2)}
+.en{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2)}
+.et{font-size:13px;font-weight:700;margin-bottom:10px}
+.ey .et{color:#4ade80}
+.en .et{color:#f87171}
+.ei{font-size:11px;color:#94a3b8;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.ei:last-child{border-bottom:none}
+
+.tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.2)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.dg{background:#4ade80}.dy{background:#fbbf24}.dr{background:#f87171}
+
+.footer{margin-top:60px;padding:28px;background:rgba(10,14,26,0.8);border:1px solid rgba(99,102,241,0.12);border-radius:16px;text-align:center}
+
+/* PDF button */
+#pdfBtn{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:12px;padding:13px 24px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(99,102,241,0.5);z-index:999;font-family:'Inter',sans-serif}
+#pdfBtn:hover{transform:translateY(-2px)}
+#pdfBtn:disabled{opacity:0.6;cursor:wait}
+</style>
+</head>
+<body>
+
+
+
+<div id="content">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Architecture Report</div>
+  <h1>CyberFamily</h1>
+  <p class="cover-sub">Zero-Knowledge Encrypted Family Platform · Self-Hosted</p>
+  <div class="cover-meta">
+    <div class="cm"><div class="val">v1.2.2</div><div class="lbl">Version</div></div>
+    <div class="cm"><div class="val">14</div><div class="lbl">Containers</div></div>
+    <div class="cm"><div class="val">AES-256-GCM</div><div class="lbl">Encryption</div></div>
+    <div class="cm"><div class="val">Mar 2026</div><div class="lbl">Generated</div></div>
+    <div class="cm"><div class="val">Ubuntu 24.04</div><div class="lbl">Host OS</div></div>
+    <div class="cm"><div class="val">cyberfamily.ge</div><div class="lbl">Domain</div></div>
+  </div>
+</div>
+
+<!-- 1. HOST -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(99,102,241,0.2);color:#a5b4fc">01</div><div class="st">Host System</div></div>
+  <div class="div"></div>
+  <div class="stats">
+    <div class="stat"><div class="sv" style="color:#6366f1">i7</div><div class="sl">i7-14700KF</div></div>
+    <div class="stat"><div class="sv" style="color:#8b5cf6">16</div><div class="sl">CPU Cores</div></div>
+    <div class="stat"><div class="sv" style="color:#3b82f6">7.7GB</div><div class="sl">RAM</div></div>
+    <div class="stat"><div class="sv" style="color:#22c55e">98GB</div><div class="sl">Disk</div></div>
+    <div class="stat"><div class="sv" style="color:#f59e0b">42%</div><div class="sl">Used</div></div>
+    <div class="stat"><div class="sv" style="color:#14b8a6">354MB</div><div class="sl">App Size</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Property</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Hostname</td><td><span class="tag">cyberfamilycore-VM</span></td></tr>
+      <tr><td>IP Address</td><td><span class="tag">192.168.31.11</span></td></tr>
+      <tr><td>OS</td><td>Ubuntu 24.04.4 LTS · Kernel 6.17.0-14-generic</td></tr>
+      <tr><td>HTTP</td><td><span class="dot dg"></span>200 OK — http://192.168.31.11</td></tr>
+      <tr><td>HTTPS</td><td><span class="dot dg"></span>200 OK — https://192.168.31.11</td></tr>
+      <tr><td>SSL Certificate</td><td>CN=cyberfamily.ge · Expires Feb 28, 2027</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 2. ARCHITECTURE -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(239,68,68,0.2);color:#f87171">02</div><div class="st">System Architecture</div></div>
+  <div class="div"></div>
+  <div class="arch">
+    <div class="arow"><span class="ab ab-i">🌐 Browser / Client</span></div>
+    <div class="arow ai"><span class="ar">↓ HTTP :80 / HTTPS :443</span></div>
+    <div class="arow"><span class="ab ab-n">⚡ cf-nginx · nginx 1.29.5 · Reverse Proxy + SSL Termination</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/auth/*</span><span class="ar">→</span><span class="ab ab-d">cf-security-engine :5010</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/lifelogs/*</span><span class="ar">→</span><span class="ab ab-d">cf-lifelogs :5050</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/contacts/*</span><span class="ar">→</span><span class="ab ab-d">cf-contacts :5020</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/calendar/*</span><span class="ar">→</span><span class="ab ab-d">cf-calendar :5030</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/vault/*</span><span class="ar">→</span><span class="ab ab-d">cf-vault :5040</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/media/*</span><span class="ar">→</span><span class="ab ab-d">cf-media-manager :5060</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/library/*</span><span class="ar">→</span><span class="ab ab-p">cf-library :5070</span></div>
+    <div class="arow ai"><span class="ar">├──</span><span>/api/projects/*</span><span class="ar">→</span><span class="ab ab-p">cf-projects :5080</span></div>
+    <div class="arow ai"><span class="ar">└──</span><span>/api/ssl/*</span><span class="ar">→</span><span class="ab ab-p">cf-gateway :5000</span></div>
+    <div class="arow" style="margin-top:8px"><span class="ar">All .NET services ↓ binary files</span></div>
+    <div class="arow"><span class="ab ab-g">🔒 cf-filestorage :5100 · Go 1.22 · AES-256-GCM</span></div>
+    <div class="arow" style="margin-top:8px"><span class="ar">All services ↓ :5432</span></div>
+    <div class="arow"><span class="ab ab-db">🗄 cf-postgres · PostgreSQL 16.12 · cyberfamily_core</span></div>
+  </div>
+</div>
+
+<!-- 3. CONTAINERS -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(59,130,246,0.2);color:#60a5fa">03</div><div class="st">Container Inventory</div></div>
+  <div class="div"></div>
+  <div class="cards">
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#ef4444,#f97316)"></div><div class="ci">⚡</div><div class="cn">cf-nginx</div><div class="cp">:80 :443</div><div class="cd">Reverse proxy, SSL termination, static serving</div><span class="badge bb">nginx 1.29.5</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div><div class="ci">🖥</div><div class="cn">cf-dashboard</div><div class="cp">:5200</div><div class="cd">React+Vite SPA · single App.jsx ~7000 lines</div><span class="badge bp">React+Vite</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div><div class="ci">🔐</div><div class="cn">cf-security-engine</div><div class="cp">:5010</div><div class="cd">Auth, JWT, sessions, BIP-39 device trust, MEK</div><span class="badge bb">ASP.NET Core 9</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#14b8a6,#22c55e)"></div><div class="ci">🌐</div><div class="cn">cf-gateway</div><div class="cp">:5000</div><div class="cd">SSL cert upload/enable API, nginx manager</div><span class="badge by">Python</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#ec4899,#f43f5e)"></div><div class="ci">👥</div><div class="cn">cf-contacts</div><div class="cp">:5020</div><div class="cd">Encrypted contact book with labels and tags</div><span class="badge bb">ASP.NET Core</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#14b8a6,#0ea5e9)"></div><div class="ci">📅</div><div class="cn">cf-calendar</div><div class="cp">:5030</div><div class="cd">Events, tasks, reminders, attendees</div><span class="badge bb">ASP.NET Core</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div><div class="ci">🔒</div><div class="cn">cf-vault</div><div class="cp">:5040</div><div class="cd">AES-256 encrypted passwords, API keys, cards</div><span class="badge bb">ASP.NET Core</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#6366f1,#a855f7)"></div><div class="ci">📓</div><div class="cn">cf-lifelogs</div><div class="cp">:5050</div><div class="cd">Journal entries with text, notes, media</div><span class="badge bb">ASP.NET Core</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div><div class="ci">🖼</div><div class="cn">cf-media-manager</div><div class="cp">:5060</div><div class="cd">Photos, videos, docs. Albums, labels, faces</div><span class="badge bb">ASP.NET Core</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#a855f7,#8b5cf6)"></div><div class="ci">📚</div><div class="cn">cf-library</div><div class="cp">:5070</div><div class="cd">Document library — 7 files stored</div><span class="badge by">Python</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#22c55e,#14b8a6)"></div><div class="ci">📁</div><div class="cn">cf-projects</div><div class="cp">:5080</div><div class="cd">Project & asset management</div><span class="badge by">Python FastAPI</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#14b8a6,#06b6d4)"></div><div class="ci">🔒</div><div class="cn">cf-filestorage</div><div class="cp">:5100</div><div class="cd">Binary file storage — AES-256-GCM encrypted</div><span class="badge bg">Go 1.22</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#64748b,#94a3b8)"></div><div class="ci">📋</div><div class="cn">cf-audit-hub</div><div class="cp">:5090</div><div class="cd">Audit trail for all system actions</div><span class="badge by">Python</span></div>
+    <div class="card"><div class="card-top" style="background:linear-gradient(90deg,#22c55e,#16a34a)"></div><div class="ci">🗄</div><div class="cn">cf-postgres</div><div class="cp">:5432</div><div class="cd">Primary DB — 11 schemas, 30+ tables</div><span class="badge bg">PostgreSQL 16.12</span></div>
+  </div>
+</div>
+
+<!-- 4. DATABASE -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(34,197,94,0.2);color:#4ade80">04</div><div class="st">Database Architecture</div></div>
+  <div class="div"></div>
+  <table>
+    <thead><tr><th>Schema</th><th>Tables</th><th>Purpose</th><th>Rows</th><th>Encrypted</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">security_engine</span></td><td>users, sessions, trusted_devices</td><td>Auth & identity</td><td>1 user · 1 device</td><td><span class="badge bg">✔ Argon2</span></td></tr>
+      <tr><td><span class="tag">life_logs</span></td><td>entries</td><td>Journal entries</td><td>2 entries</td><td><span class="badge bg">✔ AES-256</span></td></tr>
+      <tr><td><span class="tag">contacts</span></td><td>contacts, labels, contact_tags</td><td>Contact book</td><td>0 contacts</td><td><span class="badge bg">✔ AES-256</span></td></tr>
+      <tr><td><span class="tag">vault</span></td><td>credentials, password_history</td><td>Password vault</td><td>1 credential</td><td><span class="badge bg">✔ AES-256</span></td></tr>
+      <tr><td><span class="tag">media</span></td><td>files, albums, album_files, labels, file_contacts, file_labels</td><td>Media metadata</td><td>0 files · 1 album</td><td><span class="badge bg">✔ AES-256</span></td></tr>
+      <tr><td><span class="tag">calendar</span></td><td>events, tasks, task_lists, attendees, reminders</td><td>Calendar</td><td>0 events</td><td><span class="badge by">Partial</span></td></tr>
+      <tr><td><span class="tag">projects</span></td><td>projects, assets</td><td>Project management</td><td>0 projects</td><td><span class="badge by">Partial</span></td></tr>
+      <tr><td><span class="tag">library</span></td><td>files, documents</td><td>Document library</td><td>7 files</td><td><span class="badge by">Partial</span></td></tr>
+      <tr><td><span class="tag">audit_hub</span></td><td>logs</td><td>Audit trail</td><td>0 logs</td><td><span class="badge bb">Plain</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 5. SECURITY -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(245,158,11,0.2);color:#fbbf24">05</div><div class="st">Security & Encryption Model</div></div>
+  <div class="div"></div>
+  <div class="sec-flow">
+    <div class="ss"><div class="si" style="background:rgba(239,68,68,0.1)">🔑</div><div class="sc"><h4>User Password</h4><p>Hashed with <code>Argon2</code> + salt. Never stored in plaintext.</p></div></div>
+    <div class="ss"><div class="si" style="background:rgba(245,158,11,0.1)">📝</div><div class="sc"><h4>BIP-39 Mnemonic (24 words)</h4><p>Required to trust a new device. Derives the <code>Master Encryption Key (MEK)</code>.</p></div></div>
+    <div class="ss"><div class="si" style="background:rgba(99,102,241,0.1)">🧠</div><div class="sc"><h4>Master Encryption Key (MEK)</h4><p>Cached per trusted session. Never stored on server. All data enc/dec requires MEK.</p></div></div>
+    <div class="ss"><div class="si" style="background:rgba(34,197,94,0.1)">🔒</div><div class="sc"><h4>AES-256-GCM</h4><p>Applied to all sensitive data. Each field has unique <code>nonce + ciphertext + auth tag</code>.</p></div></div>
+    <div class="ss"><div class="si" style="background:rgba(59,130,246,0.1)">🌐</div><div class="sc"><h4>JWT Bearer Tokens</h4><p>Token hash stored in DB — never plaintext. Session invalidated on logout.</p></div></div>
+    <div class="ss"><div class="si" style="background:rgba(20,184,166,0.1)">🛡</div><div class="sc"><h4>TLS / SSL</h4><p>Real cert for <code>cyberfamily.ge</code> — valid until Feb 2027. HTTP redirects to HTTPS.</p></div></div>
+  </div>
+  <div class="enc-grid">
+    <div class="ec ey"><div class="et">✔ Encrypted at Rest</div>
+      <div class="ei">Contact details (name, phone, email)</div>
+      <div class="ei">Vault credentials & passwords</div>
+      <div class="ei">Media metadata & album names</div>
+      <div class="ei">Life log entry text & notes</div>
+      <div class="ei">Binary files via cf-filestorage (AES-256-GCM)</div>
+      <div class="ei">User passwords (Argon2 hash)</div>
+    </div>
+    <div class="ec en"><div class="et">⚠ Not Encrypted / Plain</div>
+      <div class="ei">PostgreSQL data files (OS level only)</div>
+      <div class="ei">Audit logs (intentionally readable)</div>
+      <div class="ei">Calendar event titles (partial)</div>
+      <div class="ei">Nginx access & error logs</div>
+      <div class="ei">Docker image layers</div>
+      <div class="ei">Container environment variables</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. FILE STORAGE -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(20,184,166,0.2);color:#2dd4bf">06</div><div class="st">File Storage</div></div>
+  <div class="div"></div>
+  <table>
+    <thead><tr><th>Property</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td>Service</td><td><span class="tag">cf-filestorage</span> — Go 1.22 · 19MB image</td></tr>
+      <tr><td>Host path</td><td><span class="tag">/opt/cyberfamily/volumes/file-storage/</span></td></tr>
+      <tr><td>Container path</td><td><span class="tag">/data/files/</span></td></tr>
+      <tr><td>Naming scheme</td><td>Content-addressable: <span class="tag">[hex:2]/[hex:2]/[full-uuid-hex]</span></td></tr>
+      <tr><td>Total files</td><td>269 binary files</td></tr>
+      <tr><td>Encryption</td><td>AES-256-GCM · 12B nonce + ciphertext + 16B auth tag</td></tr>
+      <tr><td>Key derivation</td><td>SHA-256(<span class="tag">ENCRYPTION_MASTER_KEY</span>) → 32-byte AES key</td></tr>
+      <tr><td>Legacy files</td><td>Auto-decrypted gracefully (backward compatible)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 7. NETWORK -->
+<div class="section">
+  <div class="sh"><div class="sn" style="background:rgba(139,92,246,0.2);color:#a78bfa">07</div><div class="st">Network & Ports</div></div>
+  <div class="div"></div>
+  <table>
+    <thead><tr><th>Container</th><th>Port</th><th>Exposure</th><th>Tech</th></tr></thead>
+    <tbody>
+      <tr><td>cf-nginx</td><td>80, 443</td><td><span class="badge bg">✔ Public</span></td><td>nginx 1.29.5</td></tr>
+      <tr><td>cf-dashboard</td><td>5200</td><td><span class="badge bp">Internal</span></td><td>React + Vite (63MB)</td></tr>
+      <tr><td>cf-security-engine</td><td>5010</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core 9 (267MB)</td></tr>
+      <tr><td>cf-gateway</td><td>5000</td><td><span class="badge bp">Internal</span></td><td>Python (55MB)</td></tr>
+      <tr><td>cf-contacts</td><td>5020</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core (128MB)</td></tr>
+      <tr><td>cf-calendar</td><td>5030</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core (232MB)</td></tr>
+      <tr><td>cf-vault</td><td>5040</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core (128MB)</td></tr>
+      <tr><td>cf-lifelogs</td><td>5050</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core (125MB)</td></tr>
+      <tr><td>cf-media-manager</td><td>5060</td><td><span class="badge bp">Internal</span></td><td>ASP.NET Core (655MB)</td></tr>
+      <tr><td>cf-library</td><td>5070</td><td><span class="badge bp">Internal</span></td><td>Python (65MB)</td></tr>
+      <tr><td>cf-projects</td><td>5080</td><td><span class="badge bp">Internal</span></td><td>Python FastAPI (187MB)</td></tr>
+      <tr><td>cf-filestorage</td><td>5100</td><td><span class="badge bp">Internal</span></td><td>Go 1.22 (19MB)</td></tr>
+      <tr><td>cf-audit-hub</td><td>5090</td><td><span class="badge bp">Internal</span></td><td>Python (54MB)</td></tr>
+      <tr><td>cf-postgres</td><td>5432</td><td><span class="badge bp">Internal</span></td><td>PostgreSQL 16.12 (276MB)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px">CyberFamily v1.2.2</div>
+  <div style="color:#475569;font-size:12px">Zero-Knowledge Encrypted Family Platform · Self-Hosted · cyberfamily.ge</div>
+  <div style="color:#334155;font-size:11px;margin-top:6px">Generated March 12, 2026 · 192.168.31.11 · Ubuntu 24.04 LTS</div>
+</div>
+
+</div>
+
+
+</body>
+</html>
