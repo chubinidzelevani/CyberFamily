@@ -1,6 +1,11 @@
 # CyberFamily
 CyberFamily
 
+#Startup Passwords 
+OS Password: F9nyR#mfaLhnVdSpv
+User Password: F9nyR#mfaLhnVdSpv
+User Encryption Key: sheriff bubble powder beef convince habit someone tilt float sign youth beauty gospel elite brain appear science erosion project awake leg better today arrow
+
 
 #Donate
 1. https://ko-fi.com/chubinidzelevani
